@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:prescription/upload.dart';
 
 void main() {
@@ -10,11 +13,10 @@ void main() {
         appBar: AppBar(
             elevation: 0.0,
             backgroundColor: Color(0xff29cccc),
-           leading:
-              IconButton(
-                icon: Icon(Icons.arrow_back_ios_outlined),
-                onPressed: () {},
-              ),
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back_ios_outlined),
+              onPressed: () {},
+            ),
             actions: [
               IconButton(
                 icon: Icon(Icons.help_outline_outlined),
@@ -25,23 +27,22 @@ void main() {
                 onPressed: () {},
               ),
             ]),
-bottomNavigationBar: BottomAppBar(
-
-  child: Container(
-    color: Color(0xff29cccc),
-    width: 100.0,
-    height: 60.0,
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-
-      children: [
-
-        Text('Continue  >'
-        ,style: TextStyle(color: Colors.white,fontSize: 20.0),)
-      ],
-    ),
-  ),
-),
+        bottomNavigationBar: BottomAppBar(
+          child: Container(
+            color: Color(0xff29cccc),
+            width: 100.0,
+            height: 60.0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Continue  >',
+                  style: TextStyle(color: Colors.white, fontSize: 20.0),
+                )
+              ],
+            ),
+          ),
+        ),
         body: MyProfile(),
       ),
     ),
@@ -54,89 +55,71 @@ class MyProfile extends StatefulWidget {
 }
 
 class _MyProfileState extends State<MyProfile> {
+  File file;
+  void picImage() async {
+    PickedFile pickedFile =
+        await ImagePicker().getImage(source: ImageSource.gallery);
+    file = File(pickedFile.path);
+  }
+
+  void getImage() async {
+    PickedFile pickedFile =
+        await ImagePicker().getImage(source: ImageSource.camera);
+    file = File(pickedFile.path);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: SafeArea(
-        child: Column(
-
-          children: [
-            Center(
-              child: ProfilePic(),
+        child: Column(children: [
+          Center(
+            child: ProfilePic(),
+          ),
+          Text(
+            'Upload prescription',
+            style: TextStyle(
+              color: Color(0xff29cccc),
+              fontSize: 18.0,
             ),
-
-            Text(
-              'Upload prescription',
-              style: TextStyle(
-                color: Color(0xff29cccc),
-                fontSize: 18.0,
-              ),
-              textAlign: TextAlign.center,
-            ),
-
-
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-
-                Container(
-                  child: Row(
-                    children: [
-                      Card(
-                        margin:
-                            EdgeInsets.symmetric(vertical: 30.0, horizontal: 25.0),
-                        color: Colors.white,
-                        child: Padding(
-                          padding: EdgeInsets.all(20.0),
-                          child: Row(children: [
-                            Icon(
-                              Icons.camera_alt_outlined,
-
-                              color: Color(0xff29cccc),
-                            ),
-                            SizedBox(
-                              width: 20.0,
-                              height: 25.0,
-                            ),
-                            Text(
-                              'Camera',
-                              style: TextStyle(
-                                color: Colors.teal.shade900,
-                                fontSize: 18.0,
-                              ),
-                            ),
-                          ]),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-
+            textAlign: TextAlign.center,
+          ),
+          Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
             Container(
               child: Row(
                 children: [
                   Card(
                     margin:
-                        EdgeInsets.symmetric(vertical: 30.0, horizontal: 25.0),
+                        EdgeInsets.symmetric(vertical: 30.0, horizontal: 30.0),
                     color: Colors.white,
                     child: Padding(
-                      padding: EdgeInsets.all(20.0),
+                      padding: const EdgeInsets.all(10.0),
                       child: Row(children: [
-                        Icon(
-                          Icons.image,
-                          color: Color(0xff29cccc),
+                        IconButton(
+                          icon: Icon(
+                            Icons.camera_alt_outlined,
+                            size: 30.0,
+                            color: Color(0xff29cccc),
+                          ),
+                          onPressed: () {
+                            getImage();
+                          },
                         ),
                         SizedBox(
-                          width: 20.0,
-                          height: 25.0,
+                          width: 10.0,
+                          height: 15.0,
                         ),
-                        Text(
-                          'Gallery',
-                          style: TextStyle(
-                            color: Colors.teal.shade900,
-                            fontSize: 18.0,
+                        GestureDetector(
+                          child: Text(
+                            'Camera',
+                            style: TextStyle(
+                              color: Colors.teal.shade900,
+                              fontSize: 18.0,
+                            ),
                           ),
+                          onTap: () {
+                            getImage();
+                          },
                         ),
                       ]),
                     ),
@@ -144,31 +127,73 @@ class _MyProfileState extends State<MyProfile> {
                 ],
               ),
             ),
-    ]
-            ),
-            SizedBox(
-              height: 30,
-              width: 10,
-            ),
-            Text(
-              'How a valid prescription looks',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 18.0,
-              ),
-            ),
-
             Container(
-              child: Image(
-                image: AssetImage('images/pre.png'),
+              child: Row(
+                children: [
+                  Card(
+                    margin:
+                        EdgeInsets.symmetric(vertical: 30.0, horizontal: 30.0),
+                    color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Row(children: [
+                        // Icon(
+                        // Icons.image,
+                        //color: Color(0xff29cccc),
+
+                        // ),
+                        IconButton(
+                          icon: Icon(
+                            Icons.image,
+                            size: 30.0,
+                            color: Color(0xff29cccc),
+                          ),
+                          onPressed: () {
+                            picImage();
+                          },
+                          //padding: EdgeInsets.only(right: 65.0,bottom: 66.0),
+                        ),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        GestureDetector(
+                          child: Text(
+                            'Gallery',
+                            style: TextStyle(
+                              color: Colors.teal.shade900,
+                              fontSize: 18.0,
+                            ),
+                          ),
+                          onTap: () {
+                            picImage();
+                          },
+                        ),
+                      ]),
+                    ),
+                  ),
+                ],
               ),
-              margin: EdgeInsets.fromLTRB(70, 20, 70, 70),
-              //height: 150,
             ),
-
-
-      ]
-        ),
+          ]),
+          SizedBox(
+            height: 30,
+            width: 10,
+          ),
+          Text(
+            'How a valid prescription looks',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 18.0,
+            ),
+          ),
+          Container(
+            child: Image(
+              image: AssetImage('images/pre.png'),
+            ),
+            margin: EdgeInsets.fromLTRB(70, 20, 70, 70),
+            //height: 150,
+          ),
+        ]),
       ),
     );
   }
